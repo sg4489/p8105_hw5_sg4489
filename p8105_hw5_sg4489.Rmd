@@ -11,6 +11,44 @@ library(ggplot2)
 set.seed(1)
 ```
 
+### Problem 1 
+
+```{r}
+# Function to check if there are duplicate birthdays in a group of n people
+has_duplicate_birthday <- function(n) {
+  birthdays <- sample(1:365, n, replace = TRUE)  # Randomly draw birthdays
+  return(any(duplicated(birthdays)))  # Check for duplicates and return TRUE or FALSE
+}
+
+# Initialize a vector to store probabilities
+group_sizes <- 2:50
+probabilities <- numeric(length(group_sizes))
+
+# Run the simulation for each group size
+for (i in seq_along(group_sizes)) {
+  n <- group_sizes[i]
+  results <- replicate(10000, has_duplicate_birthday(n))
+  probabilities[i] <- mean(results)  # Calculate the probability
+}
+
+# Create a data frame for plotting
+data <- data.frame(GroupSize = group_sizes, Probability = probabilities)
+
+# Plot
+ggplot(data, aes(x = GroupSize, y = Probability)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Probability of Shared Birthday as a Function of Group Size",
+    x = "Group Size",
+    y = "Probability of Shared Birthday"
+  ) +
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+The plot shows that the probability of at least two people sharing a birthday increases rapidly as the group size increases. Even with a group size as small as 23, the probability exceeds 50%. The probability approaches 1 as the group size gets closer to 50.  
+
 ### Problem 2
 
 First, I set up parameters and generate datasets.  
